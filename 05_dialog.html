@@ -1,0 +1,51 @@
+<html lang="ja">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>Dialog by Javascript</title>
+</head>
+<body>
+
+<h1>対話（Dialog）サンプル</h1>
+
+<p>
+<textarea style="width: 80%;height: 100px;line-height: 1.5em;" id="textForm">
+あなたは誰ですか
+</textarea>
+</p>
+
+<p>
+<button id="queryButton">質問</button>
+</p>
+
+<p>
+<div id="resultOutput"></div>
+</p>
+
+
+<script>
+// 応答の定義（ハッシュ）    
+var response = {
+    "あなたは誰ですか":"わたしはアレクサではありません",
+    "何歳ですか":"え、わたし、何歳にみえますか",
+    "元気ですか":"元気ですよー",
+    "好きな食べ物は":"焼肉です"
+};
+    
+const textForm = document.querySelector('#textForm'); // テキスト入力欄
+const queryButton  = document.querySelector('#queryButton'); // 質問ボタン
+const resultOutput = document.querySelector('#resultOutput'); // 結果出力エリア
+
+// 質問ボタンをクリックしたときのイベントハンドラ
+queryButton.addEventListener('click', function(){
+    let queryText = textForm.value; // フォームからのテキストの取得
+    let newText = queryText.replace(/\r?\n/g,'').replace(/\0/g,''); // 余計な文字の削除
+
+    resultOutput.innerHTML = newText + " => " + response[newText]; // 応答結果の出力
+})
+  
+</script>
+</body>
+</html>

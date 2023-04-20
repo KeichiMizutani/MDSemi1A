@@ -1,0 +1,72 @@
+<html lang="ja">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>TTS by Javascript</title>
+</head>
+<body>
+
+<h1>TTS (Text-To-Speech 音声合成）サンプル</h1>
+
+<p>
+<textarea style="width: 80%;height: 100px;line-height: 1.5em;" id="textForm">
+これは、テキストを入力として、音声を合成する音声合成のサンプルプログラムです。
+テキストから音声に変換するので、Text-To-Speechと呼ばれます。
+通称は、TTSです。
+</textarea>
+</p>
+
+<p>
+<button id="speakButton">再生</button>
+<button id="cancelButton">停止</button>
+<button id="pauseButton">一時停止</button>
+<button id="resumeButton">再開</button>
+</p>
+
+<script>
+if (!'SpeechSynthesisUtterance' in window) {
+    alert("あなたのブラウザはSpeech Synthesis APIに未対応です。");
+}
+
+const textForm = document.querySelector('#textForm'); // テキスト入力欄
+const speakButton  = document.querySelector('#speakButton'); // 再生ボタン
+const cancelButton = document.querySelector('#cancelButton'); // 停止ボタン
+const pauseButton  = document.querySelector('#pauseButton'); // 一時停止ボタン
+const resumeButton = document.querySelector('#resumeButton'); // 再開ボタン
+
+// 再生ボタンをクリックしたときのイベントハンドラ
+speakButton.addEventListener('click', function(){
+    const tts = new SpeechSynthesisUtterance(); // TTSインスタンスを生成
+    tts.text = textForm.value; // テキストを設定
+    tts.lang = "ja-JP"; // 言語(日本語)、英語の場合はen-US
+    tts.rate = 1.0; // 速度
+    tts.pitch = 1.0; // 声の高さ
+    tts.volume = 1.0; // 音量
+
+    // 再生が終了（end）ときのイベントハンドラ（終了したときに実行される）
+    tts.onend = function(event){
+	alert("終わりました！");
+    }
+
+    speechSynthesis.speak(tts); // 再生
+})
+  
+// 再生停止 (発言キューをクリア)
+cancelButton.addEventListener('click', function() {
+    speechSynthesis.cancel();
+})
+  
+// 一時停止 (発言キューを保持)
+pauseButton.addEventListener('click', function() {
+    speechSynthesis.pause();
+})
+  
+// 再生再開 (一時停止を解除)
+resumeButton.addEventListener('click', function() {
+    speechSynthesis.resume();
+})
+</script>
+</body>
+</html>
